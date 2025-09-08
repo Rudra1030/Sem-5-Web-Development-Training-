@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript If-Else Condition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* Arrange items vertically */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f2e7c3;
+            text-align: center;
+        }
+        .container {
+            padding: 25px;
+            border: 2px solid #a1887f;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #greeting {
+            font-size: 28px;
+            color: #5d4037;
+            margin-bottom: 15px; /* Add space below the greeting */
+        }
+        #time-info {
+            font-size: 16px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- This paragraph's content will be set by the JavaScript -->
+        <p id="greeting">Loading...</p>
+        <!-- This paragraph will show the hour being used in the logic -->
+        <p id="time-info">Checking the time...</p>
+    </div>
+
+    <script>
+        // Get the elements where we will show our messages
+        var greetingElement = document.getElementById('greeting');
+        var timeInfoElement = document.getElementById('time-info');
+        
+        // Create a variable to hold the current hour (0-23)
+        var currentHour = new Date().getHours();
+        
+        // Show the current hour on the page so we can see what the code is doing
+        timeInfoElement.textContent = "(The current hour is " + currentHour + ")";
+        
+        // This is the if-else condition
+        // If the current hour is less than 12, it's morning.
+        if (currentHour < 12) {
+            // This code runs if the condition is true
+            greetingElement.textContent = "Good Morning!";
+        } else {
+            // This code runs if the condition is false
+            greetingElement.textContent = "Good Afternoon!";
+        }
+    </script>
+
+</body>
+</html>
+

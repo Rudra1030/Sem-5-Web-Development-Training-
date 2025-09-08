@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Find the Greatest Number</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0f7fa;
+            text-align: center;
+        }
+        .container {
+            padding: 30px;
+            border: 2px solid #00796b;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #004d40;
+            margin-bottom: 20px;
+        }
+        #numbers-info {
+            font-size: 18px;
+            color: #37474f;
+            margin-bottom: 25px;
+        }
+        #result {
+            font-size: 22px;
+            color: #d84315;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Greatest of Three Numbers</h1>
+        
+        <!-- This paragraph will show the numbers being compared -->
+        <p id="numbers-info">Comparing numbers...</p>
+        
+        <!-- This paragraph will show the final result -->
+        <p id="result">The result will be shown here.</p>
+    </div>
+
+    <script>
+        // Get the elements where we will show our messages
+        var numbersInfoElement = document.getElementById('numbers-info');
+        var resultElement = document.getElementById('result');
+        
+        // Define three numbers to compare
+        var num1 = 45;
+        var num2 = 120;
+        var num3 = 88;
+        
+        // Display the numbers we are working with
+        numbersInfoElement.textContent = "The numbers are: " + num1 + ", " + num2 + ", and " + num3 + ".";
+        
+        // This is the if-else if-else condition to find the greatest number
+        if (num1 >= num2 && num1 >= num3) {
+            // This code runs if num1 is the greatest
+            resultElement.textContent = "The greatest number is: " + num1;
+        } else if (num2 >= num1 && num2 >= num3) {
+            // This code runs if num2 is the greatest
+            resultElement.textContent = "The greatest number is: " + num2;
+        } else {
+            // This code runs if num3 is the greatest
+            resultElement.textContent = "The greatest number is: " + num3;
+        }
+    </script>
+
+</body>
+</html>
+
