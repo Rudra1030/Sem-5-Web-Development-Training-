@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Switch Statement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f3e5f5;
+            text-align: center;
+        }
+        .container {
+            padding: 30px;
+            border: 2px solid #6a1b9a;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 450px;
+        }
+        h1 {
+            color: #4a148c;
+            margin-bottom: 20px;
+        }
+        #day-info {
+            font-size: 18px;
+            color: #37474f;
+            margin-bottom: 25px;
+        }
+        #message {
+            font-size: 22px;
+            color: #c2185b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Day of the Week</h1>
+        
+        <!-- This paragraph will show the current day -->
+        <p id="day-info">Checking the day...</p>
+        
+        <!-- This paragraph will show a message based on the day -->
+        <p id="message">The message will be shown here.</p>
+    </div>
+
+    <script>
+        // Get the elements where we will show our messages
+        var dayInfoElement = document.getElementById('day-info');
+        var messageElement = document.getElementById('message');
+        
+        // Get the current day of the week as a number (0=Sunday, 1=Monday, ..., 6=Saturday)
+        var dayOfWeek = new Date().getDay();
+        var dayName;
+        var message;
+
+        // This is the switch statement
+        // It checks the value of the 'dayOfWeek' variable
+        switch (dayOfWeek) {
+            case 0:
+                dayName = "Sunday";
+                message = "It's the weekend, time to relax!";
+                break;
+            case 1:
+                dayName = "Monday";
+                message = "A fresh start to the week!";
+                break;
+            case 2:
+                dayName = "Tuesday";
+                message = "Keep up the great work!";
+                break;
+            case 3:
+                dayName = "Wednesday";
+                message = "Halfway through the week!";
+                break;
+            case 4:
+                dayName = "Thursday";
+                message = "The weekend is almost here!";
+                break;
+            case 5:
+                dayName = "Friday";
+                message = "TGIF! Have a great one!";
+                break;
+            case 6:
+                dayName = "Saturday";
+                message = "Enjoy your weekend!";
+                break;
+            default:
+                dayName = "Unknown Day";
+                message = "Something went wrong with the date.";
+                break;
+        }
+        
+        // Display the day and the corresponding message
+        dayInfoElement.textContent = "Today is " + dayName + ".";
+        messageElement.textContent = message;
+    </script>
+
+</body>
+</html>
+
