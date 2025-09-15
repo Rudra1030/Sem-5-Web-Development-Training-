@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JavaScript Loop Examples</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  h1 {
+    text-align: center;
+    color: #007acc;
+    margin-bottom: 40px;
+  }
+  section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    color: #005f99;
+    border-bottom: 2px solid #007acc;
+    padding-bottom: 5px;
+  }
+  pre {
+    background-color: #e9f4fc;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 14px;
+  }
+  .output {
+    background: #ddeeff;
+    border-left: 5px solid #007acc;
+    padding: 10px 15px;
+    margin-top: 10px;
+    white-space: pre-wrap;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<h1>JavaScript Loop Examples</h1>
+
+<section id="for-loop">
+  <h2>For Loop</h2>
+  <pre>
+// Loops from i = 0 to i < 5, incrementing i by 1 each time
+for (let i = 0; i &lt; 5; i++) {
+    console.log("For Loop iteration: " + i);
+}
+  </pre>
+  <div class="output" id="output-for"></div>
+</section>
+
+<section id="while-loop">
+  <h2>While Loop</h2>
+  <pre>
+// Initializes counter before loop
+let j = 0;
+// Loops while condition j &lt; 5 is true
+while (j &lt; 5) {
+    console.log("While Loop iteration: " + j);
+    // Increment counter to avoid infinite loop
+    j++;
+}
+  </pre>
+  <div class="output" id="output-while"></div>
+</section>
+
+<section id="do-while-loop">
+  <h2>Do-While Loop</h2>
+  <pre>
+// Executes loop body first, then checks condition
+let k = 0;
+do {
+    console.log("Do-While Loop iteration: " + k);
+    k++;
+} while (k &lt; 5);
+  </pre>
+  <div class="output" id="output-do-while"></div>
+</section>
+
+<section id="for-in-loop">
+  <h2>For...in Loop</h2>
+  <pre>
+// Iterates over enumerable properties (keys) of an object
+const person = {name: "Alice", age: 30, city: "New York"};
+for (let key in person) {
+    console.log(key + ": " + person[key]);
+}
+  </pre>
+  <div class="output" id="output-for-in"></div>
+</section>
+
+<section id="for-of-loop">
+  <h2>For...of Loop</h2>
+  <pre>
+// Iterates over iterable objects like arrays
+const fruits = ["apple", "banana", "cherry"];
+for (let fruit of fruits) {
+    console.log("Fruit: " + fruit);
+}
+  </pre>
+  <div class="output" id="output-for-of"></div>
+</section>
+
+<script>
+  // For Loop
+  let outputFor = "";
+  for (let i = 0; i < 5; i++) {
+    outputFor += "For Loop iteration: " + i + "\n";
+  }
+  document.getElementById("output-for").textContent = outputFor;
+
+  // While Loop
+  let outputWhile = "";
+  let j = 0;
+  while (j < 5) {
+    outputWhile += "While Loop iteration: " + j + "\n";
+    j++;
+  }
+  document.getElementById("output-while").textContent = outputWhile;
+
+  // Do-While Loop
+  let outputDoWhile = "";
+  let k = 0;
+  do {
+    outputDoWhile += "Do-While Loop iteration: " + k + "\n";
+    k++;
+  } while (k < 5);
+  document.getElementById("output-do-while").textContent = outputDoWhile;
+
+  // For...in Loop
+  let outputForIn = "";
+  const person = { name: "Alice", age: 30, city: "New York" };
+  for (let key in person) {
+    outputForIn += key + ": " + person[key] + "\n";
+  }
+  document.getElementById("output-for-in").textContent = outputForIn;
+
+  // For...of Loop
+  let outputForOf = "";
+  const fruits = ["apple", "banana", "cherry"];
+  for (let fruit of fruits) {
+    outputForOf += "Fruit: " + fruit + "\n";
+  }
+  document.getElementById("output-for-of").textContent = outputForOf;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Simple Tables and Odd/Even</title>
+</head>
+<body>
+  <!-- Input fields for two numbers and a button to run -->
+  <h1>Simple Multiplication Tables and Odd/Even</h1>
+
+  <!-- Number 1 input -->
+  <label>Number 1:
+    <input id="num1" type="number" placeholder="e.g., 2">
+  </label>
+  <br><br>
+
+  <!-- Number 2 input (optional) -->
+  <label>Number 2 (optional):
+    <input id="num2" type="number" placeholder="e.g., 3">
+  </label>
+  <br><br>
+
+  <!-- Button to generate tables and categorize -->
+  <button id="go">Generate</button>
+
+  <!-- Sections for output -->
+  <h2>Table of Number 1</h2>
+  <pre id="table1"></pre>
+
+  <h2>Table of Number 2</h2>
+  <pre id="table2"></pre>
+
+  <h2>Odd Numbers (from both tables)</h2>
+  <pre id="odd"></pre>
+
+  <h2>Even Numbers (from both tables)</h2>
+  <pre id="even"></pre>
+
+  <script>
+    // This function builds a multiplication table from 1 to 10 for n and returns the list of products.
+    function buildTable(n) {
+      const lines = [];            // Stores each "n x i = result" line of text.
+      const products = [];         // Stores only the numeric results for odd/even split later.
+      if (n === null || Number.isNaN(n)) {
+        lines.push("No number provided."); // If input isn't a number, show a simple message.
+        return { text: lines.join("\n"), products }; // Return the text and empty products.
+      }
+      for (let i = 1; i <= 10; i++) {     // Loop i from 1 to 10.
+        const result = n * i;             // Multiply n by i to get the product.
+        lines.push(n + " x " + i + " = " + result); // Build the human-readable line.
+        products.push(result);            // Save the product for later categorization.
+      }
+      return { text: lines.join("\n"), products }; // Return table text and the list of products.
+    }
+
+    // This function splits a list of numbers into odd and even arrays using modulus (%).
+    function splitOddEven(arr) {
+      const odd = [];                      // Will collect odd numbers.
+      const even = [];                     // Will collect even numbers.
+      for (let i = 0; i < arr.length; i++) { // Loop through every number in the array.
+        const v = arr[i];                  // Current number.
+        if (v % 2 === 0) {                 // If divisible by 2, it's even.
+          even.push(v);                    // Add to even list.
+        } else {                           // Otherwise it's odd.
+          odd.push(v);                     // Add to odd list.
+        }
+      }
+      return { odd, even };                // Return both lists.
+    }
+
+    // Main click handler: reads inputs, builds tables, and displays odd/even.
+    document.getElementById("go").addEventListener("click", function () {
+      const n1 = Number(document.getElementById("num1").value); // Read Number 1 from input.
+      const n2raw = document.getElementById("num2").value;      // Read raw string for Number 2.
+      const n2 = n2raw === "" ? null : Number(n2raw);           // If blank, use null; else convert to number.
+
+      // Build both tables; each returns text and a list of products.
+      const t1 = buildTable(n1);
+      const t2 = buildTable(n2);
+
+      // Show the tables in their <pre> blocks.
+      document.getElementById("table1").textContent = t1.text;
+      document.getElementById("table2").textContent = t2.text;
+
+      // Combine both products, then split into odd and even.
+      const combined = t1.products.concat(t2.products);
+      const groups = splitOddEven(combined);
+
+      // Display odd and even lists as comma-separated values.
+      document.getElementById("odd").textContent = groups.odd.length ? groups.odd.join(", ") : "None";
+      document.getElementById("even").textContent = groups.even.length ? groups.even.join(", ") : "None";
+    });
+  </script>
+</body>
+</html>

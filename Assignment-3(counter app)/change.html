@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Image Changer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .main-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 350px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <h1 class="text-3xl font-bold mb-4 text-gray-800">Car Image Changer</h1>
+            
+            <div class="image-container">
+                <img id="displayImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA5zvDKzutZWwaXvP2CWKbdbyMTLLqKjaHGQ&s" alt="Car Image" class="rounded-lg">
+            </div>
+
+            <button id="changeButton" class="w-full py-2 px-4 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600 transition duration-300">
+                Change Car
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const displayImage = document.getElementById('displayImage');
+            const changeButton = document.getElementById('changeButton');
+            
+            const images = [
+                // Lamborghini
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA5zvDKzutZWwaXvP2CWKbdbyMTLLqKjaHGQ&s",
+                "https://imgs.search.brave.com/MWFY5UtQm-iG2IGL0oYOzzMvUjhSSLB1gh5RC1vi8Nk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oaXBz/LmhlYXJzdGFwcHMu/Y29tL2htZy1wcm9k/L2ltYWdlcy82NTQ1/MDgtY29weS02NmJm/YTM5MWRmNDA5Lmpw/Zz9jcm9wPTF4dzox/eGg7Y2VudGVyLHRv/cCZyZXNpemU9OTgw/Oio",
+                
+                // Ferrari
+                "https://imgs.search.brave.com/EAgUGXibefZHN8IAGcrbuNJKyiW9sK8ZJ3s-6hVI_m8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oaXBz/LmhlYXJzdGFwcHMu/Y29tL2htZy1wcm9k/L2ltYWdlcy82NTQ1/MDYtNjZiZmEyMzll/OTQ1ZS5qcGc_Y3Jv/cD0xeHc6MXhoO2Nl/bnRlcix0b3AmcmVz/aXplPTk4MDoq",
+                "https://imgs.search.brave.com/ylWdg5U6kVFNK6PL5EkP-la3vsFi2_EsVBHgThAmIhE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMubGFtYm9jYXJz/LmNvbS93cC1jb250/ZW50L3VwbG9hZHMv/MjAyMi8wNC8yMDIy/LUxhbWJvcmdoaW5p/LUh1cmFjYW4tVGVj/bmljYS0xLmpwZw",
+
+                // Mercedes
+                "https://i.ibb.co/VvM55s1/mercedes-amg-gt.jpg",
+                "https://i.ibb.co/X8Yd00Y/mercedes-s-class.jpg"
+            ];
+            let currentImageIndex = 0;
+
+            changeButton.addEventListener('click', () => {
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                displayImage.src = images[currentImageIndex];
+            });
+        });
+    </script>
+</body>
+</html>

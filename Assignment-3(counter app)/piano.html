@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Piano</title>
+    <!-- Include Tailwind CSS for modern, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for the piano keys */
+        .piano-key {
+            width: 100px; /* Set the width of each key */
+            height: 200px; /* Set the height of each key */
+            border-radius: 8px; /* Apply rounded corners to the keys */
+            transition: transform 0.1s ease; /* Add a smooth transition for the press effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+            cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+            user-select: none; /* Prevent text selection on the keys */
+        }
+        
+        /* Add a pressed down effect when a key is active */
+        .piano-key:active {
+            transform: scale(0.95); /* Shrink the key slightly to simulate a press */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adjust shadow for the pressed state */
+        }
+
+        /* Set different background colors for each key */
+        #key1 { background-color: #fca5a5; } /* Red */
+        #key2 { background-color: #fcd34d; } /* Yellow */
+        #key3 { background-color: #86efac; } /* Green */
+        #key4 { background-color: #60a5fa; } /* Blue */
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <!-- Container for the entire piano app -->
+    <div class="bg-white p-8 rounded-xl shadow-lg">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Simple Piano</h1>
+        
+        <!-- The main piano keyboard with four keys -->
+        <div class="flex space-x-4">
+            <!-- First piano key -->
+            <div id="key1" class="piano-key flex items-center justify-center text-xl font-bold text-gray-800">A</div>
+            
+            <!-- Second piano key -->
+            <div id="key2" class="piano-key flex items-center justify-center text-xl font-bold text-gray-800">S</div>
+            
+            <!-- Third piano key -->
+            <div id="key3" class="piano-key flex items-center justify-center text-xl font-bold text-gray-800">D</div>
+            
+            <!-- Fourth piano key -->
+            <div id="key4" class="piano-key flex items-center justify-center text-xl font-bold text-gray-800">F</div>
+        </div>
+    </div>
+
+    <!-- JavaScript for sound functionality -->
+    <script>
+        // Use the Web Audio API for generating sound
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Function to play a sound with a specific frequency and duration
+        function playSound(frequency, duration) {
+            // Create a new oscillator node (this generates the sound wave)
+            const oscillator = audioContext.createOscillator();
+            // Set the type of wave to 'sine' for a clean tone
+            oscillator.type = 'sine';
+            // Set the frequency of the oscillator (pitch of the note)
+            oscillator.frequency.value = frequency;
+
+            // Create a gain node (this controls the volume of the sound)
+            const gainNode = audioContext.createGain();
+            // Connect the oscillator to the gain node
+            oscillator.connect(gainNode);
+            // Connect the gain node to the speakers (the audio output destination)
+            gainNode.connect(audioContext.destination);
+
+            // Start the oscillator
+            oscillator.start();
+            // Stop the oscillator after the specified duration
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        // Get references to all four key elements
+        const key1 = document.getElementById('key1');
+        const key2 = document.getElementById('key2');
+        const key3 = document.getElementById('key3');
+        const key4 = document.getElementById('key4');
+
+        // Add a click event listener to the first key
+        key1.addEventListener('click', () => {
+            // When clicked, play a C4 note (261.63 Hz) for 0.5 seconds
+            playSound(261.63, 0.5); 
+        });
+
+        // Add a click event listener to the second key
+        key2.addEventListener('click', () => {
+            // When clicked, play a D4 note (293.66 Hz) for 0.5 seconds
+            playSound(293.66, 0.5); 
+        });
+
+        // Add a click event listener to the third key
+        key3.addEventListener('click', () => {
+            // When clicked, play an E4 note (329.63 Hz) for 0.5 seconds
+            playSound(329.63, 0.5); 
+        });
+
+        // Add a click event listener to the fourth key
+        key4.addEventListener('click', () => {
+            // When clicked, play a G4 note (392.00 Hz) for 0.5 seconds
+            playSound(392.00, 0.5); 
+        });
+    </script>
+</body>
+</html>

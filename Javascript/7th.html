@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Auto Multiplication Tables • Odd/Even Split</title>
+<style>
+  :root { --primary:#2563eb; --bg:#f8fafc; --card:#ffffff; --accent:#e2e8f0; --muted:#64748b; --odd:#fde68a; --even:#bfdbfe; }
+  body { margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial; background:var(--bg); color:#0f172a; line-height:1.5; }
+  header { text-align:center; padding:28px 16px 8px; }
+  header h1 { margin:0 0 6px; color:var(--primary); font-weight:800; }
+  header p { margin:0; color:var(--muted); }
+  .wrap { max-width:1000px; margin:16px auto 40px; padding:0 16px; }
+  .card { background:var(--card); border-radius:12px; border:1px solid var(--accent); box-shadow:0 6px 24px rgba(15,23,42,.06); padding:16px; margin-bottom:16px; }
+  .grid { display:grid; gap:16px; }
+  @media (min-width: 900px){ .grid.two{ grid-template-columns:1fr 1fr; } }
+  label { font-weight:700; display:block; margin-bottom:6px; }
+  .row { display:flex; gap:10px; align-items:center; }
+  input[type="number"] { width:100%; padding:10px 12px; border:1px solid var(--accent); border-radius:8px; font-size:16px; }
+  input[type="number"]:focus { outline:none; border-color:var(--primary); }
+  .actions { text-align:center; margin-top:10px; }
+  button { background:var(--primary); color:#fff; border:none; padding:10px 16px; border-radius:10px; font-size:16px; cursor:pointer; }
+  button:hover { filter:brightness(1.05); }
+  h2 { margin:8px 0 10px; color:var(--primary); }
+  table { width:100%; border-collapse:collapse; border:1px solid var(--accent); border-radius:8px; overflow:hidden; }
+  th, td { padding:10px 12px; border-bottom:1px solid var(--accent); text-align:center; font-weight:600; }
+  thead th { background:#eff6ff; color:#1e3a8a; }
+  tbody tr:nth-child(even) td { background:#f8fafc; }
+  .pill { display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; margin:4px 6px 0 0; }
+  .pill.odd { background:var(--odd); }
+  .pill.even { background:var(--even); }
+  .muted { color:var(--muted); font-style:italic; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Auto Tables → Odd / Even</h1>
+    <p>Enter a number (e.g., 2). The program auto-generates its multiplication table using loops. Add an optional second number too.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="card grid two">
+      <div>
+        <label for="n1">Number 1</label>
+        <div class="row">
+          <input id="n1" type="number" placeholder="e.g., 2" min="0" />
+          <input id="r1" type="number" placeholder="Range (default 10)" min="1" />
+        </div>
+      </div>
+      <div>
+        <label for="n2">Number 2 (optional)</label>
+        <div class="row">
+          <input id="n2" type="number" placeholder="e.g., 3" min="0" />
+          <input id="r2" type="number" placeholder="Range (default 10)" min="1" />
+        </div>
+      </div>
+      <div class="actions" style="grid-column:1 / -1;">
+        <button id="build">Generate Tables and Split Odd/Even</button>
+      </div>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <h2>Table of <span id="label1" class="muted">—</span></h2>
+        <table id="t1">
+          <thead><tr><th>#</th><th>Expression</th><th>Result</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Table of <span id="label2" class="muted">—</span></h2>
+        <table id="t2">
+          <thead><tr><th>#</th><th>Expression</th><th>Result</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <h2>Odd Numbers</h2>
+        <div id="odd" class="muted">Awaiting input…</div>
+      </div>
+      <div class="card">
+        <h2>Even Numbers</h2>
+        <div id="even" class="muted">Awaiting input…</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Build a multiplication table using a loop, e.g., for n = 2 and range = 10, print 2 x 1 .. 2 x 10
+  function renderMultiplicationTable(tableId, labelId, n, range) {
+    const tbody = document.querySelector('#' + tableId + ' tbody');
+    const labelEl = document.getElementById(labelId);
+    tbody.innerHTML = '';
+
+    if (n === null || Number.isNaN(n)) {
+      labelEl.textContent = '—';
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 3;
+      td.className = 'muted';
+      td.textContent = 'No number provided';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return [];
+    }
+
+    if (!range || range < 1) range = 10; // default range 10 as per common practice
+
+    labelEl.textContent = n;
+
+    const results = [];
+    for (let i = 1; i <= range; i++) {
+      const product = n * i;
+      results.push(product);
+
+      // Create row with three cells: index, expression, result
+      const tr = document.createElement('tr');
+      const cells = [i, `${n} × ${i}`, product];
+      for (let j = 0; j < cells.length; j++) {
+        const td = document.createElement('td');
+        td.textContent = cells[j];
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+    return results;
+  }
+
+  // Split a number list into odd and even by modulus n % 2
+  function splitOddEven(list) {
+    const odd = [];
+    const even = [];
+    for (let i = 0; i < list.length; i++) {
+      const v = list[i];
+      if (v % 2 === 0) even.push(v); else odd.push(v);
+    }
+    return { odd, even };
+  }
+
+  // Render tag-like pills for a list
+  function renderPills(containerId, values, type) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+    if (!values.length) {
+      el.className = 'muted';
+      el.textContent = 'None';
+      return;
+    }
+    el.className = '';
+    for (let i = 0; i < values.length; i++) {
+      const span = document.createElement('span');
+      span.className = 'pill ' + type;
+      span.textContent = String(values[i]);
+      el.appendChild(span);
+    }
+  }
+
+  // Main
+  document.getElementById('build').addEventListener('click', () => {
+    const n1 = Number(document.getElementById('n1').value);
+    const r1 = Number(document.getElementById('r1').value);
+    const n2raw = document.getElementById('n2').value;
+    const r2 = Number(document.getElementById('r2').value);
+    const n2 = n2raw !== '' ? Number(n2raw) : null;
+
+    // Build tables via loops
+    const list1 = renderMultiplicationTable('t1', 'label1', n1, r1);
+    const list2 = renderMultiplicationTable('t2', 'label2', n2, r2);
+
+    // Combine products, split odd/even, and show
+    const combined = list1.concat(list2);
+    const { odd, even } = splitOddEven(combined);
+
+    renderPills('odd', odd, 'odd');
+    renderPills('even', even, 'even');
+  });
+</script>
+</body>
+</html>
