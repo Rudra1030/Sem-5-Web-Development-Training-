@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apocalypse Survival Tasks</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Metal+Mania&display=swap');
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        @keyframes bloodDrip {
+            0% { transform: translateY(-100px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        @keyframes smokeRise {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-200px) scale(2); opacity: 0; }
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 5px #ff4444, 0 0 10px #ff4444, 0 0 15px #ff4444; }
+            50% { box-shadow: 0 0 10px #ff6666, 0 0 20px #ff6666, 0 0 30px #ff6666; }
+        }
+        
+        @keyframes taskComplete {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            75% { transform: scale(1.1) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+        }
+        
+        @keyframes newTaskAppear {
+            0% { transform: translateY(-50px) scale(0.8); opacity: 0; }
+            50% { transform: translateY(10px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes deleteTask {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(0.8) rotate(180deg); }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Metal Mania', cursive;
+            background: linear-gradient(45deg, #1a0000, #330000, #1a0000, #4d0000);
+            background-size: 400% 400%;
+            animation: backgroundShift 8s ease-in-out infinite;
+            min-height: 100vh;
+            color: #ff6666;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        @keyframes backgroundShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .smoke {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(100,100,100,0.3), transparent);
+            border-radius: 50%;
+            animation: smokeRise 6s linear infinite;
+            z-index: 1;
+        }
+        
+        .blood-drop {
+            position: fixed;
+            width: 8px;
+            height: 20px;
+            background: linear-gradient(to bottom, #cc0000, #990000);
+            border-radius: 0 0 50% 50%;
+            animation: bloodDrip 4s linear infinite;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .title {
+            font-family: 'Creepster', cursive;
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ff4444;
+            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+            animation: flicker 3s infinite, shake 0.5s infinite;
+            transform-origin: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #cc6666;
+            animation: flicker 4s infinite;
+        }
+        
+        .input-section {
+            background: rgba(0,0,0,0.8);
+            border: 2px solid #ff4444;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            animation: glowPulse 2s infinite;
+            backdrop-filter: blur(5px);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        #taskInput {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1rem;
+            background: rgba(20,0,0,0.9);
+            border: 2px solid #cc4444;
+            border-radius: 8px;
+            color: #ff6666;
+            font-family: 'Metal Mania', cursive;
+            transition: all 0.3s ease;
+        }
+        
+        #taskInput:focus {
+            outline: none;
+            border-color: #ff6666;
+            box-shadow: 0 0 15px rgba(255,68,68,0.5);
+            transform: scale(1.02);
+        }
+        
+        #taskInput::placeholder {
+            color: #996666;
+        }
+        
+        .priority-select {
+            padding: 15px;
+            background: rgba(20,0,0,0.9);
+            border: 2px solid #cc4444;
+            border-radius: 8px;
+            color: #ff6666;
+            font-family: 'Metal Mania', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .priority-select:focus {
+            outline: none;
+            border-color: #ff6666;
+            box-shadow: 0 0 15px rgba(255,68,68,0.5);
+        }
+        
+        .add-btn {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #cc0000, #ff4444);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Metal Mania', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .add-btn:hover {
+            background: linear-gradient(45deg, #ff4444, #ff6666);
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 5px 15px rgba(255,68,68,0.4);
+        }
+        
+        .add-btn:active {
+            transform: scale(0.95) rotate(-2deg);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #cc4444;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            animation: flicker 5s infinite;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4444;
+            text-shadow: 0 0 10px #ff0000;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #cc6666;
+            text-transform: uppercase;
+        }
+        
+        .task-list {
+            background: rgba(0,0,0,0.7);
+            border: 2px solid #cc4444;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 300px;
+        }
+        
+        .task-item {
+            background: rgba(20,0,0,0.8);
+            border: 1px solid #cc4444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            animation: newTaskAppear 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .task-item:hover {
+            transform: translateX(10px) scale(1.02);
+            border-color: #ff6666;
+            box-shadow: 0 5px 15px rgba(255,68,68,0.3);
+        }
+        
+        .task-item.completed {
+            animation: taskComplete 0.8s ease-out;
+            background: rgba(0,20,0,0.6);
+            border-color: #666;
+        }
+        
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .task-item.deleting {
+            animation: deleteTask 0.5s ease-out forwards;
+        }
+        
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cc4444;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .task-checkbox:hover {
+            border-color: #ff6666;
+            transform: scale(1.1);
+        }
+        
+        .task-checkbox.checked {
+            background: #cc4444;
+            border-color: #ff6666;
+        }
+        
+        .task-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px;
+            left: 2px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .task-text {
+            flex: 1;
+            font-size: 1.1rem;
+            color: #ff6666;
+            transition: all 0.3s ease;
+        }
+        
+        .priority-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            animation: glowPulse 3s infinite;
+        }
+        
+        .priority-high {
+            background: linear-gradient(45deg, #cc0000, #ff4444);
+            color: white;
+        }
+        
+        .priority-medium {
+            background: linear-gradient(45deg, #cc6600, #ff9944);
+            color: white;
+        }
+        
+        .priority-low {
+            background: linear-gradient(45deg, #666600, #999944);
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #990000;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            background: #cc0000;
+            transform: scale(1.2) rotate(90deg);
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #cc6666;
+            font-size: 1.2rem;
+            animation: flicker 6s infinite;
+        }
+        
+        .empty-state::before {
+            content: '💀';
+            display: block;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: shake 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="smoke" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="smoke" style="left: 30%; animation-delay: 2s;"></div>
+    <div class="smoke" style="left: 60%; animation-delay: 4s;"></div>
+    <div class="smoke" style="left: 85%; animation-delay: 1s;"></div>
+    
+    <div class="blood-drop" style="left: 20%; animation-delay: 1s;"></div>
+    <div class="blood-drop" style="left: 50%; animation-delay: 3s;"></div>
+    <div class="blood-drop" style="left: 80%; animation-delay: 5s;"></div>
+
+    <div class="container">
+        <h1 class="title">SURVIVAL TASKS</h1>
+        <p class="subtitle">Complete your missions before the world ends...</p>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="taskInput" placeholder="Enter your survival task..." maxlength="100">
+                <select class="priority-select" id="prioritySelect">
+                    <option value="high">🔥 Critical</option>
+                    <option value="medium">⚠️ Important</option>
+                    <option value="low">📋 Normal</option>
+                </select>
+                <button class="add-btn" onclick="addTask()">ADD TASK</button>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalTasks">0</div>
+                <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="completedTasks">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="remainingTasks">0</div>
+                <div class="stat-label">Remaining</div>
+            </div>
+        </div>
+        
+        <div class="task-list" id="taskList">
+            <div class="empty-state">
+                <div>No survival tasks yet...</div>
+                <div style="margin-top: 10px; font-size: 1rem;">The apocalypse waits for no one!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tasks = [];
+        let taskIdCounter = 0;
+
+        // Add task function
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const prioritySelect = document.getElementById('prioritySelect');
+            const taskText = taskInput.value.trim();
+            
+            if (taskText === '') {
+                // Shake animation for empty input
+                taskInput.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    taskInput.style.animation = '';
+                }, 500);
+                return;
+            }
+            
+            const task = {
+                id: taskIdCounter++,
+                text: taskText,
+                priority: prioritySelect.value,
+                completed: false,
+                createdAt: new Date()
+            };
+            
+            tasks.push(task);
+            taskInput.value = '';
+            renderTasks();
+            updateStats();
+            
+            // Add screen shake effect when adding task
+            document.body.style.animation = 'shake 0.3s ease-in-out';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 300);
+        }
+
+        // Toggle task completion
+        function toggleTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                renderTasks();
+                updateStats();
+                
+                // Add completion effect
+                if (task.completed) {
+                    createExplosionEffect();
+                }
+            }
+        }
+
+        // Delete task
+        function deleteTask(taskId) {
+            const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+            if (taskElement) {
+                taskElement.classList.add('deleting');
+                setTimeout(() => {
+                    tasks = tasks.filter(t => t.id !== taskId);
+                    renderTasks();
+                    updateStats();
+                }, 500);
+            }
+        }
+
+        // Create explosion effect
+        function createExplosionEffect() {
+            for (let i = 0; i < 10; i++) {
+                const spark = document.createElement('div');
+                spark.style.position = 'fixed';
+                spark.style.width = '4px';
+                spark.style.height = '4px';
+                spark.style.background = '#ff4444';
+                spark.style.borderRadius = '50%';
+                spark.style.left = Math.random() * window.innerWidth + 'px';
+                spark.style.top = Math.random() * window.innerHeight + 'px';
+                spark.style.pointerEvents = 'none';
+                spark.style.zIndex = '1000';
+                
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 100 + 50;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                document.body.appendChild(spark);
+                
+                let x = parseFloat(spark.style.left);
+                let y = parseFloat(spark.style.top);
+                
+                const animate = () => {
+                    x += vx * 0.02;
+                    y += vy * 0.02;
+                    spark.style.left = x + 'px';
+                    spark.style.top = y + 'px';
+                    spark.style.opacity = parseFloat(spark.style.opacity || 1) - 0.02;
+                    
+                    if (parseFloat(spark.style.opacity) > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        document.body.removeChild(spark);
+                    }
+                };
+                
+                requestAnimationFrame(animate);
+            }
+        }
+
+        // Render tasks
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            
+            if (tasks.length === 0) {
+                taskList.innerHTML = `
+                    <div class="empty-state">
+                        <div>No survival tasks yet...</div>
+                        <div style="margin-top: 10px; font-size: 1rem;">The apocalypse waits for no one!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort tasks by priority and completion
+            const sortedTasks = [...tasks].sort((a, b) => {
+                if (a.completed !== b.completed) {
+                    return a.completed ? 1 : -1;
+                }
+                const priorityOrder = { high: 0, medium: 1, low: 2 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            });
+            
+            taskList.innerHTML = sortedTasks.map(task => `
+                <div class="task-item ${task.completed ? 'completed' : ''}" data-task-id="${task.id}">
+                    <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${task.id})"></div>
+                    <div class="task-text">${task.text}</div>
+                    <div class="priority-badge priority-${task.priority}">
+                        ${task.priority === 'high' ? '🔥 Critical' : task.priority === 'medium' ? '⚠️ Important' : '📋 Normal'}
+                    </div>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.completed).length;
+            const remaining = total - completed;
+            
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('remainingTasks').textContent = remaining;
+        }
+
+        // Add enter key support
+        document.getElementById('taskInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        // Create random environmental effects
+        function createRandomEffects() {
+            // Random smoke
+            if (Math.random() < 0.3) {
+                const smoke = document.createElement('div');
+                smoke.className = 'smoke';
+                smoke.style.left = Math.random() * 100 + '%';
+                smoke.style.animationDelay = '0s';
+                document.body.appendChild(smoke);
+                
+                setTimeout(() => {
+                    if (document.body.contains(smoke)) {
+                        document.body.removeChild(smoke);
+                    }
+                }, 6000);
+            }
+            
+            // Random blood drops
+            if (Math.random() < 0.2) {
+                const blood = document.createElement('div');
+                blood.className = 'blood-drop';
+                blood.style.left = Math.random() * 100 + '%';
+                blood.style.animationDelay = '0s';
+                document.body.appendChild(blood);
+                
+                setTimeout(() => {
+                    if (document.body.contains(blood)) {
+                        document.body.removeChild(blood);
+                    }
+                }, 4000);
+            }
+        }
+
+        // Start random effects
+        setInterval(createRandomEffects, 3000);
+
+        // Initialize
+        updateStats();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9805ea34064b8991',t:'MTc1ODA4MzkxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
