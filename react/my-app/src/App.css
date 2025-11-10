@@ -1,0 +1,38 @@
+body {
+  background-color: #f4f4f9;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #24292e;
+  color: white;
+  padding: 10px 40px;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar ul li {
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.navbar ul li:hover {
+  color: #00b4d8;
+}
+
+.book-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 40px;
+}
